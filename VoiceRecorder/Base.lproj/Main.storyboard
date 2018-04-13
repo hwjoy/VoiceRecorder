@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="enx-Ce-ZLm">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!--History-->
+        <scene sceneID="ems-ti-VbN">
+            <objects>
+                <tableViewController id="d4X-WA-wL0" customClass="HistoryTableViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WTZ-tK-lXu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecordCell" textLabel="Wm2-zd-pwU" style="IBUITableViewCellStyleDefault" id="7O8-IW-wn5">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7O8-IW-wn5" id="XOr-Un-KS2">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Wm2-zd-pwU">
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="d4X-WA-wL0" id="Jt0-Gg-ixY"/>
+                            <outlet property="delegate" destination="d4X-WA-wL0" id="eRj-PB-d05"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="History" image="padnote" id="wNY-Fc-Bug"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nE6-LT-QHu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1614" y="1170"/>
+        </scene>
+        <!--Voice Recorder-->
+        <scene sceneID="oSi-rL-jMH">
+            <objects>
+                <viewController id="EMq-Ad-aD9" customClass="RecorderViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XW9-dJ-tEf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7Ha-7T-dDm">
+                                <rect key="frame" x="16" y="548" width="343" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtv-pS-1Ib">
+                                        <rect key="frame" x="0.0" y="0.0" width="109" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bS7-jS-ggD">
+                                        <rect key="frame" x="117" y="0.0" width="109" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="db4-YF-AwF">
+                                        <rect key="frame" x="234" y="0.0" width="109" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7Ha-7T-dDm" firstAttribute="leading" secondItem="PVl-VV-g3I" secondAttribute="leading" constant="16" id="0wq-FY-EbV"/>
+                            <constraint firstItem="PVl-VV-g3I" firstAttribute="trailing" secondItem="7Ha-7T-dDm" secondAttribute="trailing" constant="16" id="2IQ-1g-vH8"/>
+                            <constraint firstItem="PVl-VV-g3I" firstAttribute="bottom" secondItem="7Ha-7T-dDm" secondAttribute="bottom" constant="40" id="JgQ-9q-z9h"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="PVl-VV-g3I"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Voice Recorder" image="voice_recorder" id="nXK-o1-Aid"/>
+                    <connections>
+                        <outlet property="pauseButton" destination="bS7-jS-ggD" id="qKw-d3-AOQ"/>
+                        <outlet property="startButton" destination="Mtv-pS-1Ib" id="O0C-EX-xHR"/>
+                        <outlet property="stopButton" destination="db4-YF-AwF" id="i5A-2K-eGV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SXQ-0L-YgP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1615" y="504"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="9Ki-W7-j6X">
+            <objects>
+                <tabBarController id="enx-Ce-ZLm" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Nf1-gi-3zH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="EMq-Ad-aD9" kind="relationship" relationship="viewControllers" id="ETg-nB-A1J"/>
+                        <segue destination="d4X-WA-wL0" kind="relationship" relationship="viewControllers" id="qXn-VI-lft"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TnN-tu-t0b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="662" y="837"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="padnote" width="22" height="32"/>
+        <image name="voice_recorder" width="21" height="32"/>
+    </resources>
+</document>
