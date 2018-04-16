@@ -11,6 +11,7 @@ import AVFoundation
 
 class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
 
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
@@ -21,6 +22,22 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         return NSString(string: documentDirectory).appendingPathComponent(filename)
     }()
+    lazy var updateMetersTimer: Timer = {
+        return Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+            self.audioRecorder?.updateMeters()
+            if var powerChannel0 = self.audioRecorder?.averagePower(forChannel: 0) {
+                powerChannel0 += 160
+                self.performSelector(onMainThread: #selector(self.updateWaveform(_:lineColor:)), with: [powerChannel0, UIColor.black], waitUntilDone: false)
+            }
+            if var powerChannel1 = self.audioRecorder?.averagePower(forChannel: 1) {
+                powerChannel1 += 160
+                self.performSelector(onMainThread: #selector(self.updateWaveform(_:lineColor:)), with: [powerChannel1, UIColor.purple], waitUntilDone: false)
+            }
+        })
+    }()
+    
+    var powerArray: Array<Float> = []
+    var waveformView: WaveformView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +52,8 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - Init
+    
     fileprivate func initViews() {
         startButton.setTitle(NSLocalizedString("Start", comment: ""), for: .normal)
         pauseButton.setTitle(NSLocalizedString("Pause", comment: ""), for: .normal)
@@ -45,6 +64,10 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         startButton.addTarget(self, action: #selector(startButtonAction(_:)), for: .touchUpInside)
         pauseButton.addTarget(self, action: #selector(pauseButtonAction(_:)), for: .touchUpInside)
         stopButton.addTarget(self, action: #selector(stopButtonAction(_:)), for: .touchUpInside)
+        
+        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 2))
+        waveformView?.backgroundColor = UIColor.clear
+        view.addSubview(waveformView!)
     }
     
     fileprivate func initAudio() {
@@ -59,7 +82,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     @objc func setupAudio(_ audioSession: AVAudioSession) {
-        self.startButton.isEnabled = true
+        startButton.isEnabled = true
         
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -68,6 +91,19 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
             print(error)
         }
     }
+    
+    // MARK: - Display Waveform
+    
+    @objc func updateWaveform(_ value: Float, lineColor: UIColor) {
+        print("[I] \(NSString(string: #file).lastPathComponent) \(#function) \(value) \(lineColor)")
+        
+        powerArray.append(value)
+        waveformView?.dataSource = powerArray
+        waveformView?.lineColor = UIColor.black
+        waveformView?.setNeedsDisplay()
+    }
+    
+    // MARK: - User Action
     
     @objc func startButtonAction(_ sender: UIButton) {
         sender.isEnabled = false
@@ -80,14 +116,15 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
                 AVSampleRateKey : 44100.0,  //声音采样率
                 AVNumberOfChannelsKey : 2,  //采集音轨
                 AVEncoderAudioQualityKey : AVAudioQuality.medium.rawValue] as [String : Any]
-            try self.audioRecorder = AVAudioRecorder(url: URL(fileURLWithPath: currentAudioFilePath), settings: recorderSettings)
-            self.audioRecorder?.delegate = self
-            self.audioRecorder?.isMeteringEnabled = true
+            try audioRecorder = AVAudioRecorder(url: URL(fileURLWithPath: currentAudioFilePath), settings: recorderSettings)
+            audioRecorder?.delegate = self
+            audioRecorder?.isMeteringEnabled = true
             
-            if (self.audioRecorder?.isRecording)! {
+            if (audioRecorder?.isRecording)! {
                 return
             }
-            self.audioRecorder?.record()
+            audioRecorder?.record()
+            updateMetersTimer.fire()
         } catch {
             print(error)
         }
@@ -97,8 +134,9 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         sender.isEnabled = false
         startButton.isEnabled = true
         
-        if (self.audioRecorder?.isRecording)! {
-            self.audioRecorder?.pause()
+        if (audioRecorder?.isRecording)! {
+            audioRecorder?.pause()
+            updateMetersTimer.invalidate()
         }
     }
     
@@ -107,8 +145,9 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         startButton.isEnabled = true
         pauseButton.isEnabled = false
         
-        if (self.audioRecorder?.isRecording)! {
-            self.audioRecorder?.stop()
+        if (audioRecorder?.isRecording)! {
+            audioRecorder?.stop()
+            updateMetersTimer.invalidate()
         }
     }
 
