@@ -10,6 +10,7 @@ import UIKit
 
 class WaveformView: UIView {
 
+    static let SampleRate = 0.2
     var dataSource: Array<Float> = []
     var lineColor = UIColor.black
     
@@ -17,23 +18,36 @@ class WaveformView: UIView {
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
         // Drawing code
-        guard dataSource.count != 0 else {
+        guard !dataSource.isEmpty else {
             return
         }
         
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        context.setLineWidth(1)
-        context.setStrokeColor(lineColor.cgColor)
+//        guard let context = UIGraphicsGetCurrentContext() else {
+//            return
+//        }
+        
+        lineColor.setStroke()
+        
+        let yOffset = CGFloat(5)
         var pointArray = Array<CGPoint>()
         for (i, item) in dataSource.enumerated() {
-            if item > 0 {
-                pointArray.append(CGPoint(x: CGFloat(i), y: CGFloat(item)))
+            var yValue: CGFloat = CGFloat(item)
+            if item < 110 {
+                yValue = 110
             }
+            yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
+            pointArray.append(CGPoint(x: rect.width * CGFloat(i) / 60 * CGFloat(WaveformView.SampleRate), y: yValue))
         }
-        context.addLines(between: pointArray)
-        context.drawPath(using: .stroke)
+        
+        let bezierPath = UIBezierPath()
+        bezierPath.lineWidth = 1
+        bezierPath.lineCapStyle = .round
+        bezierPath.lineJoinStyle = .round
+        bezierPath.move(to: CGPoint(x: 0, y: rect.height - yOffset))
+        for item in pointArray {
+            bezierPath.addLine(to: item)
+        }
+        bezierPath.stroke()
     }
 
 }

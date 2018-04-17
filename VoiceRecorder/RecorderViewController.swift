@@ -18,22 +18,23 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     
     var audioRecorder: AVAudioRecorder?
     lazy var currentAudioFilePath: String = {
-        let filename = Date().description + ".m4a"
+        let filename = dateFormatter.string(from: Date()) + ".m4a"
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         return NSString(string: documentDirectory).appendingPathComponent(filename)
     }()
     lazy var updateMetersTimer: Timer = {
-        return Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+        return Timer.scheduledTimer(withTimeInterval: WaveformView.SampleRate, repeats: true, block: { (timer) in
             self.audioRecorder?.updateMeters()
             if var powerChannel0 = self.audioRecorder?.averagePower(forChannel: 0) {
                 powerChannel0 += 160
-                self.performSelector(onMainThread: #selector(self.updateWaveform(_:lineColor:)), with: [powerChannel0, UIColor.black], waitUntilDone: false)
-            }
-            if var powerChannel1 = self.audioRecorder?.averagePower(forChannel: 1) {
-                powerChannel1 += 160
-                self.performSelector(onMainThread: #selector(self.updateWaveform(_:lineColor:)), with: [powerChannel1, UIColor.purple], waitUntilDone: false)
+                self.performSelector(onMainThread: #selector(self.updateWaveform(_:)), with: [NSNumber(value: powerChannel0), UIColor.black.withAlphaComponent(0.8)], waitUntilDone: false)
             }
         })
+    }()
+    lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter
     }()
     
     var powerArray: Array<Float> = []
@@ -65,9 +66,9 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         pauseButton.addTarget(self, action: #selector(pauseButtonAction(_:)), for: .touchUpInside)
         stopButton.addTarget(self, action: #selector(stopButtonAction(_:)), for: .touchUpInside)
         
-        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 2))
+        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height / 2))
         waveformView?.backgroundColor = UIColor.clear
-        view.addSubview(waveformView!)
+        containerView.addSubview(waveformView!)
     }
     
     fileprivate func initAudio() {
@@ -94,12 +95,16 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     
     // MARK: - Display Waveform
     
-    @objc func updateWaveform(_ value: Float, lineColor: UIColor) {
-        print("[I] \(NSString(string: #file).lastPathComponent) \(#function) \(value) \(lineColor)")
+    @objc func updateWaveform(_ params: [Any]) {
+        print("[I] \(Date()) \(NSString(string: #file).lastPathComponent) \(#function) \(params)")
         
-        powerArray.append(value)
+        guard params.count > 1 else {
+            return
+        }
+        
+        powerArray.append(params.first as! Float)
         waveformView?.dataSource = powerArray
-        waveformView?.lineColor = UIColor.black
+        waveformView?.lineColor = params[1] as! UIColor
         waveformView?.setNeedsDisplay()
     }
     
@@ -124,7 +129,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
                 return
             }
             audioRecorder?.record()
-            updateMetersTimer.fire()
+            updateMetersTimer.fireDate = Date.distantPast
         } catch {
             print(error)
         }
@@ -136,7 +141,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         
         if (audioRecorder?.isRecording)! {
             audioRecorder?.pause()
-            updateMetersTimer.invalidate()
+            updateMetersTimer.fireDate = Date.distantFuture
         }
     }
     
@@ -145,10 +150,9 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         startButton.isEnabled = true
         pauseButton.isEnabled = false
         
-        if (audioRecorder?.isRecording)! {
-            audioRecorder?.stop()
-            updateMetersTimer.invalidate()
-        }
+        audioRecorder?.stop()
+        updateMetersTimer.fireDate = Date.distantFuture
+        powerArray.removeAll()
     }
 
     // MARK: - AVAudioRecorderDelegate

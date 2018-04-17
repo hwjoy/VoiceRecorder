@@ -28,7 +28,8 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         
         let statusHeight = UIApplication.shared.statusBarFrame.height
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: statusHeight))
-        tableView.tableFooterView = UIView()
+        let tabBarController = UITabBarController()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: tabBarController.tabBar.frame.height))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,7 +43,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    fileprivate func playAudio(_ filename: String) {
+    fileprivate func playAudio(_ filename: String) -> TimeInterval {
         let url = NSString(string: audioFilesPath).appendingPathComponent(filename)
         do {
             audioPlay = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: url))
@@ -51,6 +52,8 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         } catch {
             print(error)
         }
+        guard let duration = audioPlay?.duration else { return 0 }
+        return duration
     }
     
     // MARK: - AVAudioRecorderDelegate
@@ -79,6 +82,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordCell", for: indexPath)
         cell.textLabel?.text = fileArray?[indexPath.row]
+        cell.detailTextLabel?.text = " "
 
         return cell
     }
@@ -89,7 +93,9 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         guard let array = fileArray else {
             return
         }
-        playAudio(array[indexPath.row])
+        let duration = Int(playAudio(array[indexPath.row])) 
+        tableView.reloadData()
+        tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = String(format: "%02d:%02d", duration / 60, duration % 60)
     }
 
     // Override to support conditional editing of the table view.
@@ -102,7 +108,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            if fileArray != nil {
+            if fileArray != nil && !fileArray!.isEmpty {
                 let filename = fileArray![indexPath.row]
                 let url = NSString(string: audioFilesPath).appendingPathComponent(filename)
                 try? FileManager.default.removeItem(atPath: url)
