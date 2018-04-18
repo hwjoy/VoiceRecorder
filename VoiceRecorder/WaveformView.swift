@@ -10,7 +10,7 @@ import UIKit
 
 class WaveformView: UIView {
 
-    static let SampleRate = 0.2
+    static let SampleRate = 0.05
     var dataSource: Array<Float> = []
     var lineColor = UIColor.black
     
@@ -28,25 +28,46 @@ class WaveformView: UIView {
         
         lineColor.setStroke()
         
+        let displayTime = 1.0;    // min
         let yOffset = CGFloat(5)
         var pointArray = Array<CGPoint>()
-        for (i, item) in dataSource.enumerated() {
-            var yValue: CGFloat = CGFloat(item)
-            if item < 110 {
-                yValue = 110
+        if dataSource.count > Int(displayTime / WaveformView.SampleRate) {
+            let xOffset = dataSource.count - Int(displayTime / WaveformView.SampleRate)
+            for i in xOffset ..< dataSource.count {
+                let item = dataSource[i]
+                var yValue: CGFloat = CGFloat(item)
+                if item < 110 {
+                    yValue = 110
+                }
+                yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
+                let xValue = i - xOffset
+                pointArray.append(CGPoint(x: rect.width * CGFloat(Double(xValue) / displayTime * WaveformView.SampleRate), y: yValue))
             }
-            yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
-            pointArray.append(CGPoint(x: rect.width * CGFloat(i) / 60 * CGFloat(WaveformView.SampleRate), y: yValue))
+        } else {
+            for (i, item) in dataSource.enumerated() {
+                var yValue: CGFloat = CGFloat(item)
+                if item < 110 {
+                    yValue = 110
+                }
+                yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
+                pointArray.append(CGPoint(x: rect.width * CGFloat(Double(i) / displayTime * WaveformView.SampleRate), y: yValue))
+            }
         }
         
         let bezierPath = UIBezierPath()
-        bezierPath.lineWidth = 1
+        bezierPath.lineWidth = 2
         bezierPath.lineCapStyle = .round
         bezierPath.lineJoinStyle = .round
         bezierPath.move(to: CGPoint(x: 0, y: rect.height - yOffset))
         for item in pointArray {
             bezierPath.addLine(to: item)
         }
+        
+//        if dataSource.count > 1 {
+//            let transform = CGAffineTransform(translationX: rect.width * CGFloat(Double(dataSource.count) / displayTime * WaveformView.SampleRate), y: 0)
+//            bezierPath.apply(transform)
+//        }
+        
         bezierPath.stroke()
     }
 
