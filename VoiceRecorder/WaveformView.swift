@@ -58,7 +58,7 @@ class WaveformView: UIView {
         bezierPath.lineWidth = 2
         bezierPath.lineCapStyle = .round
         bezierPath.lineJoinStyle = .round
-        bezierPath.move(to: CGPoint(x: 0, y: rect.height - yOffset))
+        bezierPath.move(to: pointArray.first!)
         for item in pointArray {
             bezierPath.addLine(to: item)
         }
