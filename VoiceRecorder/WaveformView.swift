@@ -31,25 +31,25 @@ class WaveformView: UIView {
         let displayTime = 1.0;    // min
         let yOffset = CGFloat(5)
         var pointArray = Array<CGPoint>()
-        if dataSource.count > Int(displayTime / WaveformView.SampleRate) {
-            let xOffset = dataSource.count - Int(displayTime / WaveformView.SampleRate)
+        if dataSource.count > Int(displayTime / WaveformView.SampleRate) + 1 {
+            let xOffset = dataSource.count - Int(displayTime / WaveformView.SampleRate) - 1
             for i in xOffset ..< dataSource.count {
                 let item = dataSource[i]
                 var yValue: CGFloat = CGFloat(item)
-                if item < 110 {
-                    yValue = 110
+                if item < AudioLevel {
+                    yValue = CGFloat(AudioLevel)
                 }
-                yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
+                yValue = rect.height - rect.height * (yValue - CGFloat(AudioLevel)) / 50 - yOffset
                 let xValue = i - xOffset
                 pointArray.append(CGPoint(x: rect.width * CGFloat(Double(xValue) / displayTime * WaveformView.SampleRate), y: yValue))
             }
         } else {
             for (i, item) in dataSource.enumerated() {
                 var yValue: CGFloat = CGFloat(item)
-                if item < 110 {
-                    yValue = 110
+                if item < AudioLevel {
+                    yValue = CGFloat(AudioLevel)
                 }
-                yValue = rect.height - rect.height * (yValue - 110) / 50 - yOffset
+                yValue = rect.height - rect.height * (yValue - CGFloat(AudioLevel)) / 50 - yOffset
                 pointArray.append(CGPoint(x: rect.width * CGFloat(Double(i) / displayTime * WaveformView.SampleRate), y: yValue))
             }
         }

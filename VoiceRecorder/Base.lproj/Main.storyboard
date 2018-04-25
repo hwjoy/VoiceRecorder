@@ -42,14 +42,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Wm2-zd-pwU">
-                                            <rect key="frame" x="16" y="5" width="34" height="20"/>
+                                            <rect key="frame" x="16" y="5" width="33.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="poc-h4-yXk">
-                                            <rect key="frame" x="16" y="25" width="44" height="15"/>
+                                            <rect key="frame" x="16" y="25.5" width="44" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -79,7 +79,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QKY-FS-9Sm">
-                                <rect key="frame" x="16" y="20" width="343" height="510"/>
+                                <rect key="frame" x="16" y="36" width="343" height="494"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7Ha-7T-dDm">
@@ -107,7 +107,7 @@
                         <constraints>
                             <constraint firstItem="7Ha-7T-dDm" firstAttribute="leading" secondItem="PVl-VV-g3I" secondAttribute="leading" constant="16" id="0wq-FY-EbV"/>
                             <constraint firstItem="PVl-VV-g3I" firstAttribute="trailing" secondItem="7Ha-7T-dDm" secondAttribute="trailing" constant="16" id="2IQ-1g-vH8"/>
-                            <constraint firstItem="QKY-FS-9Sm" firstAttribute="top" secondItem="PVl-VV-g3I" secondAttribute="top" id="Bz9-6l-acZ"/>
+                            <constraint firstItem="QKY-FS-9Sm" firstAttribute="top" secondItem="PVl-VV-g3I" secondAttribute="top" constant="16" id="Bz9-6l-acZ"/>
                             <constraint firstItem="PVl-VV-g3I" firstAttribute="bottom" secondItem="7Ha-7T-dDm" secondAttribute="bottom" constant="40" id="JgQ-9q-z9h"/>
                             <constraint firstItem="PVl-VV-g3I" firstAttribute="trailing" secondItem="QKY-FS-9Sm" secondAttribute="trailing" constant="16" id="Nl8-9T-5VO"/>
                             <constraint firstItem="QKY-FS-9Sm" firstAttribute="leading" secondItem="PVl-VV-g3I" secondAttribute="leading" constant="16" id="Ra9-bE-MUd"/>

@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 
+public let AudioLevel:Float = 120.0
+
 class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
 
     @IBOutlet weak var containerView: UIView!
@@ -39,6 +41,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     
     var powerArray: Array<Float> = []
     var waveformView: WaveformView?
+    var barPlotView: BarPlotView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,9 +69,16 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         pauseButton.addTarget(self, action: #selector(pauseButtonAction(_:)), for: .touchUpInside)
         stopButton.addTarget(self, action: #selector(stopButtonAction(_:)), for: .touchUpInside)
         
-        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height / 2))
-        waveformView?.backgroundColor = UIColor.clear
+        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height / 2 - 16))
+        waveformView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        waveformView?.layer.cornerRadius = 8
+        waveformView?.layer.masksToBounds = true
         containerView.addSubview(waveformView!)
+        
+        barPlotView = BarPlotView(frame: CGRect(x: 0, y: containerView.frame.height / 2, width: containerView.frame.width, height: containerView.frame.height / 2))
+        barPlotView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        barPlotView?.layer.cornerRadius = 8
+        containerView.addSubview(barPlotView!)
     }
     
     fileprivate func initAudio() {

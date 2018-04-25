@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		672431922090D6DB00844706 /* BarPlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672431912090D6DB00844706 /* BarPlotView.swift */; };
 		677ABD4B207CFD07005BEDD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677ABD4A207CFD07005BEDD3 /* AppDelegate.swift */; };
 		677ABD4D207CFD07005BEDD3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677ABD4C207CFD07005BEDD3 /* ViewController.swift */; };
 		677ABD50207CFD07005BEDD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 677ABD4E207CFD07005BEDD3 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		672431912090D6DB00844706 /* BarPlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarPlotView.swift; sourceTree = "<group>"; };
 		677ABD47207CFD07005BEDD3 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		677ABD4A207CFD07005BEDD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		677ABD4C207CFD07005BEDD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				67A44C1B207D0E3600D4EA48 /* RecorderViewController.swift */,
 				67A44C1D207D0E5400D4EA48 /* HistoryTableViewController.swift */,
 				67E3DB882084EF9400613A7F /* WaveformView.swift */,
+				672431912090D6DB00844706 /* BarPlotView.swift */,
 				677ABD4E207CFD07005BEDD3 /* Main.storyboard */,
 				677ABD51207CFD07005BEDD3 /* Assets.xcassets */,
 				677ABD53207CFD07005BEDD3 /* LaunchScreen.storyboard */,
@@ -148,6 +151,7 @@
 				67A44C1E207D0E5400D4EA48 /* HistoryTableViewController.swift in Sources */,
 				677ABD4D207CFD07005BEDD3 /* ViewController.swift in Sources */,
 				67E3DB892084EF9400613A7F /* WaveformView.swift in Sources */,
+				672431922090D6DB00844706 /* BarPlotView.swift in Sources */,
 				67A44C1C207D0E3600D4EA48 /* RecorderViewController.swift in Sources */,
 				677ABD4B207CFD07005BEDD3 /* AppDelegate.swift in Sources */,
 			);
