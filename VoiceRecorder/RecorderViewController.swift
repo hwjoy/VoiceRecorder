@@ -47,8 +47,16 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        initViews()
+        initButtons()
         initAudio()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if waveformView == nil {
+            initViews()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,7 +66,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
 
     // MARK: - Init
     
-    fileprivate func initViews() {
+    fileprivate func initButtons() {
         startButton.setTitle(NSLocalizedString("Start", comment: ""), for: .normal)
         pauseButton.setTitle(NSLocalizedString("Pause", comment: ""), for: .normal)
         stopButton.setTitle(NSLocalizedString("Stop", comment: ""), for: .normal)
@@ -68,7 +76,9 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         startButton.addTarget(self, action: #selector(startButtonAction(_:)), for: .touchUpInside)
         pauseButton.addTarget(self, action: #selector(pauseButtonAction(_:)), for: .touchUpInside)
         stopButton.addTarget(self, action: #selector(stopButtonAction(_:)), for: .touchUpInside)
-        
+    }
+    
+    fileprivate func initViews() {
         waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height / 2 - 16))
         waveformView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         waveformView?.layer.cornerRadius = 8
@@ -78,7 +88,10 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         barPlotView = BarPlotView(frame: CGRect(x: 0, y: containerView.frame.height / 2, width: containerView.frame.width, height: containerView.frame.height / 2))
         barPlotView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         barPlotView?.layer.cornerRadius = 8
+        barPlotView?.layer.masksToBounds = true
         containerView.addSubview(barPlotView!)
+        
+        barPlotView?.setBarData([])
     }
     
     fileprivate func initAudio() {

@@ -79,11 +79,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QKY-FS-9Sm">
-                                <rect key="frame" x="16" y="36" width="343" height="494"/>
+                                <rect key="frame" x="16" y="36" width="343" height="518"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7Ha-7T-dDm">
-                                <rect key="frame" x="16" y="538" width="343" height="40"/>
+                                <rect key="frame" x="16" y="562" width="343" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtv-pS-1Ib">
                                         <rect key="frame" x="0.0" y="0.0" width="109" height="40"/>
@@ -108,7 +108,7 @@
                             <constraint firstItem="7Ha-7T-dDm" firstAttribute="leading" secondItem="PVl-VV-g3I" secondAttribute="leading" constant="16" id="0wq-FY-EbV"/>
                             <constraint firstItem="PVl-VV-g3I" firstAttribute="trailing" secondItem="7Ha-7T-dDm" secondAttribute="trailing" constant="16" id="2IQ-1g-vH8"/>
                             <constraint firstItem="QKY-FS-9Sm" firstAttribute="top" secondItem="PVl-VV-g3I" secondAttribute="top" constant="16" id="Bz9-6l-acZ"/>
-                            <constraint firstItem="PVl-VV-g3I" firstAttribute="bottom" secondItem="7Ha-7T-dDm" secondAttribute="bottom" constant="40" id="JgQ-9q-z9h"/>
+                            <constraint firstItem="PVl-VV-g3I" firstAttribute="bottom" secondItem="7Ha-7T-dDm" secondAttribute="bottom" constant="16" id="JgQ-9q-z9h"/>
                             <constraint firstItem="PVl-VV-g3I" firstAttribute="trailing" secondItem="QKY-FS-9Sm" secondAttribute="trailing" constant="16" id="Nl8-9T-5VO"/>
                             <constraint firstItem="QKY-FS-9Sm" firstAttribute="leading" secondItem="PVl-VV-g3I" secondAttribute="leading" constant="16" id="Ra9-bE-MUd"/>
                             <constraint firstItem="7Ha-7T-dDm" firstAttribute="top" secondItem="QKY-FS-9Sm" secondAttribute="bottom" constant="8" id="khj-T1-fe7"/>
