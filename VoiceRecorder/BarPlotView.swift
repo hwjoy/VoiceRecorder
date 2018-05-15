@@ -18,26 +18,29 @@ class BarPlotView: UIView {
     }
     */
 
+    // data: [second]
     public func setBarData(_ data: [Int]) {
         _ = subviews.map({ $0.removeFromSuperview() })
         
         guard !data.isEmpty else {
+            self.frame = CGRect(x: 0, y: 0, width: frame.width, height: 0)
             return
         }
         
-        let barGap = 8
-        let barWidth = (frame.width - CGFloat(barGap * (data.count + 1))) / CGFloat(data.count)
+        let barGap = CGFloat(8)
+        let barHeight = CGFloat(20)
         for (i, item) in data.enumerated() {
-            let barHeight = CGFloat(item) / 60 * frame.height
+            let barWidth = CGFloat(item) / 60 * frame.width
             
             let button = UIButton(type: .system)
-            button.frame = CGRect(x: CGFloat(i) * barWidth + CGFloat((i + 1) * barGap), y: frame.height - barHeight, width: barWidth, height: barHeight)
+            button.frame = CGRect(x: 0, y: CGFloat(i) * barHeight + CGFloat(i + 1) * barGap, width: barWidth, height: barHeight)
             button.setBackgroundImage(UIImage.imageWithColor(UIColor(red: 0, green: 122.0 / 255, blue: 255.0 / 255, alpha: 1.0)), for: .normal)
             button.setBackgroundImage(UIImage.imageWithColor(UIColor(red: 197.0 / 255, green: 224.0 / 255, blue: 255.0 / 255, alpha: 1.0)), for: .focused)
             button.layer.cornerRadius = 5
             button.layer.masksToBounds = true
             addSubview(button)
         }
+        self.frame = CGRect(x: 0, y: 0, width: frame.width, height: (barHeight + barGap) * CGFloat(data.count) + barGap)
     }
     
 }

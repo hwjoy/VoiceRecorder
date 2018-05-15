@@ -42,6 +42,7 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     var powerArray: Array<Float> = []
     var waveformView: WaveformView?
     var barPlotView: BarPlotView?
+    var scrollView: UIScrollView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,19 +80,25 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     fileprivate func initViews() {
-        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height / 2 - 16))
+        let waveformViewHeight = CGFloat(100.0)
+        
+        waveformView = WaveformView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: waveformViewHeight))
         waveformView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         waveformView?.layer.cornerRadius = 8
         waveformView?.layer.masksToBounds = true
         containerView.addSubview(waveformView!)
         
-        barPlotView = BarPlotView(frame: CGRect(x: 0, y: containerView.frame.height / 2, width: containerView.frame.width, height: containerView.frame.height / 2))
-        barPlotView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        barPlotView?.layer.cornerRadius = 8
-        barPlotView?.layer.masksToBounds = true
-        containerView.addSubview(barPlotView!)
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: waveformViewHeight + 16, width: containerView.frame.width, height: containerView.frame.height - waveformViewHeight - 16))
+        scrollView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        scrollView?.layer.cornerRadius = 8
+        scrollView?.layer.masksToBounds = true
+        containerView.addSubview(scrollView!)
+        
+        barPlotView = BarPlotView(frame: CGRect(x: 0, y: 0, width: scrollView!.frame.width, height: 0))
+        scrollView?.addSubview(barPlotView!)
         
         barPlotView?.setBarData([])
+        scrollView?.contentSize = (barPlotView?.frame.size)!
     }
     
     fileprivate func initAudio() {
