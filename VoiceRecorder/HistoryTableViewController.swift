@@ -14,7 +14,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     lazy var audioFilesPath: String = {
         return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
     }()
-    var fileArray: [String]?
+    var fileArray: [(directory: String, subFile: [String])]?
     var audioPlay: AVAudioPlayer?
     var selectedIndex = -1
     var selectedDuration = 0.0
@@ -36,7 +36,22 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fileArray = FileManager.default.subpaths(atPath: audioFilesPath)?.reversed()
+        fileArray = []
+        let files = FileManager.default.enumerator(atPath: audioFilesPath)
+        while let file = files?.nextObject() as? String {
+            if (NSString(string: file).pathExtension == "") {
+                fileArray?.append((file, []))
+            } else {
+                let fileDirectory = NSString(string: file).deletingLastPathComponent
+                if let index = fileArray?.count, fileDirectory == fileArray?.last?.directory {
+                    var subFile = fileArray?.last?.subFile
+                    subFile?.append(file)
+                    fileArray?[index - 1] = (fileDirectory, subFile!)
+                }
+            }
+        }
+        
+        print("[I] AudioFilesPath = \(fileArray ?? [])")
         
         tableView.reloadData()
     }
@@ -51,7 +66,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
             return 0
         }
         
-        let filename = fileArray![indexPath.row]
+        let filename = fileArray![indexPath.section].subFile[indexPath.row]
         let url = URL(fileURLWithPath: NSString(string: audioFilesPath).appendingPathComponent(filename))
         if audioPlay?.url == url {
             if audioPlay != nil && audioPlay!.isPlaying {
@@ -96,7 +111,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
             return
         }
         
-        let filename = fileArray![indexPath.row]
+        let filename = fileArray![indexPath.section].subFile[indexPath.row]
         let url = URL(fileURLWithPath: NSString(string: audioFilesPath).appendingPathComponent(filename))
         deleteFile(url, indexPath: indexPath)
     }
@@ -108,7 +123,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
             return
         }
         
-        fileArray!.remove(at: indexPath.row)
+        fileArray![indexPath.section].subFile.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
@@ -127,19 +142,22 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let array = fileArray else {
             return 0
         }
         return array.count
     }
 
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let array = fileArray else {
+            return 0
+        }
+        return array[section].subFile.count
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordCell", for: indexPath)
-        cell.textLabel?.text = fileArray?[indexPath.row]
+        cell.textLabel?.text = NSString(string: (fileArray?[indexPath.section].subFile[indexPath.row])!).lastPathComponent
         cell.textLabel?.backgroundColor = UIColor.clear
         cell.detailTextLabel?.backgroundColor = UIColor.clear
         cell.selectionStyle = .none
@@ -171,12 +189,16 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return fileArray?[section].directory
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         selectedIndex = indexPath.row
         selectedDuration = playAudio(indexPath)
-        tableView.reloadSections([0], with: .none)
+        tableView.reloadSections([indexPath.section], with: .none)
     }
 
     // Override to support conditional editing of the table view.

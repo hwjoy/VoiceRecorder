@@ -24,6 +24,11 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         return NSString(string: documentDirectory).appendingPathComponent(filename)
     }()
+    lazy var currentAudioDirectoryPath: String = {
+        let filename = dateFormatter.string(from: Date())
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        return NSString(string: documentDirectory).appendingPathComponent(filename)
+    }()
     lazy var updateMetersTimer: Timer = {
         return Timer.scheduledTimer(withTimeInterval: WaveformView.SampleRate, repeats: true, block: { (timer) in
             self.audioRecorder?.updateMeters()
@@ -146,12 +151,14 @@ class RecorderViewController: UIViewController, AVAudioRecorderDelegate {
         stopButton.isEnabled = true
         
         do {
+            try FileManager.default.createDirectory(atPath: currentAudioDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+            
             let recorderSettings = [
                 AVFormatIDKey : kAudioFormatMPEG4AAC,   //编码格式
                 AVSampleRateKey : 44100.0,  //声音采样率
                 AVNumberOfChannelsKey : 2,  //采集音轨
                 AVEncoderAudioQualityKey : AVAudioQuality.medium.rawValue] as [String : Any]
-            try audioRecorder = AVAudioRecorder(url: URL(fileURLWithPath: currentAudioFilePath), settings: recorderSettings)
+            try audioRecorder = AVAudioRecorder(url: URL(fileURLWithPath: NSString(string: currentAudioDirectoryPath).appendingPathComponent("Part-1.m4a")), settings: recorderSettings)
             audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true
             
