@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		672431922090D6DB00844706 /* BarPlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672431912090D6DB00844706 /* BarPlotView.swift */; };
+		677983D521247A9C00D4D1A7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 677983D421247A9C00D4D1A7 /* README.md */; };
 		677ABD4B207CFD07005BEDD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677ABD4A207CFD07005BEDD3 /* AppDelegate.swift */; };
 		677ABD4D207CFD07005BEDD3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677ABD4C207CFD07005BEDD3 /* ViewController.swift */; };
 		677ABD50207CFD07005BEDD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 677ABD4E207CFD07005BEDD3 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		672431912090D6DB00844706 /* BarPlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarPlotView.swift; sourceTree = "<group>"; };
+		677983D421247A9C00D4D1A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		677ABD47207CFD07005BEDD3 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		677ABD4A207CFD07005BEDD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		677ABD4C207CFD07005BEDD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 			children = (
 				677ABD49207CFD07005BEDD3 /* VoiceRecorder */,
 				677ABD48207CFD07005BEDD3 /* Products */,
+				677983D421247A9C00D4D1A7 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,6 +112,11 @@
 					677ABD46207CFD07005BEDD3 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -137,6 +145,7 @@
 			files = (
 				677ABD55207CFD07005BEDD3 /* LaunchScreen.storyboard in Resources */,
 				677ABD52207CFD07005BEDD3 /* Assets.xcassets in Resources */,
+				677983D521247A9C00D4D1A7 /* README.md in Resources */,
 				677ABD50207CFD07005BEDD3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

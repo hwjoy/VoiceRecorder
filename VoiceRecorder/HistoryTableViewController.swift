@@ -16,7 +16,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     }()
     var fileArray: [(directory: String, subFile: [String])]?
     var audioPlay: AVAudioPlayer?
-    var selectedIndex = -1
+    var selectedIndexPath: IndexPath?
     var selectedDuration = 0.0
     var selectedCurrentTime = 0.0
     
@@ -50,7 +50,9 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
                 }
             }
         }
-        
+        fileArray = fileArray?.filter({ (_, subFile) -> Bool in
+            return subFile.count > 0
+        })
         print("[I] AudioFilesPath = \(fileArray ?? [])")
         
         tableView.reloadData()
@@ -87,7 +89,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
             } catch {
                 print(error)
                 
-                selectedIndex = -1
+                selectedIndexPath = nil
                 
                 let alertController = UIAlertController(title: NSLocalizedString("File corrupted", comment: ""), message: NSLocalizedString("Delete the file?", comment: ""), preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: NSLocalizedString("Keep", comment: ""), style: .cancel, handler: { (_) in
@@ -161,13 +163,13 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
         cell.textLabel?.backgroundColor = UIColor.clear
         cell.detailTextLabel?.backgroundColor = UIColor.clear
         cell.selectionStyle = .none
-        if indexPath.row == selectedIndex {
+        if indexPath == selectedIndexPath {
             let time = Int(selectedDuration)
             cell.detailTextLabel?.text = String(format: "%02d:%02d", time / 60, time % 60)
         } else {
             cell.detailTextLabel?.text = " "
         }
-        if indexPath.row == selectedIndex {
+        if indexPath == selectedIndexPath {
             let progressView = UIView(frame: CGRect(x: 0, y: 0, width: CGFloat(selectedCurrentTime / selectedDuration) * cell.bounds.width, height: cell.bounds.height))
             progressView.backgroundColor = UIColor(red: 0, green: 122.0 / 255, blue: 255.0 / 255, alpha: 0.6)
             if audioPlay != nil && audioPlay!.isPlaying {
@@ -196,7 +198,7 @@ class HistoryTableViewController: UITableViewController, AVAudioPlayerDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        selectedIndex = indexPath.row
+        selectedIndexPath = indexPath
         selectedDuration = playAudio(indexPath)
         tableView.reloadSections([indexPath.section], with: .none)
     }
